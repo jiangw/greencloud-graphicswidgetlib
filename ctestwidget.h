@@ -17,8 +17,8 @@ public:
     int WidgetHeight();
     void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget);
 
-public slots:
-    void SLOT_LeftButtonClickProc();
+protected:
+    void LeftButtonClicked(QPointF a_CMousePos);
 
 private:
     QString m_qstrMsg;

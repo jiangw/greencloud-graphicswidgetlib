@@ -8,9 +8,6 @@ CTestWidget::CTestWidget(int a_iWidth, int a_iHeight, CGraphicsWidget *a_pParent
 
     this->InitBoundingRect(this->WidgetWidth(), this->WidgetHeight());
     m_qstrMsg = "Test Widget";
-
-    connect(this, SIGNAL(SIGNAL_LeftButtonClicked()),
-            this, SLOT(SLOT_LeftButtonClickProc()));
 }
 
 int CTestWidget::WidgetWidth()
@@ -37,7 +34,7 @@ void CTestWidget::paint(QPainter *painter, const QStyleOptionGraphicsItem *optio
     painter->restore();
 }
 
-void CTestWidget::SLOT_LeftButtonClickProc()
+void CTestWidget::LeftButtonClicked(QPointF a_CMousePos)
 {
     m_qstrMsg = "Left button clicked";
     update(this->boundingRect());
