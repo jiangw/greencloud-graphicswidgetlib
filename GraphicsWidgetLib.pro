@@ -20,4 +20,5 @@ SOURCES += main.cpp \
 HEADERS  += \
     ctestwindow.h \
     ctestwidget.h \
-    cgraphicswidget.h
+    cgraphicswidget.h \
+    gconfig.h

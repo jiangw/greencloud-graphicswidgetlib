@@ -19,6 +19,7 @@ private:
     QGraphicsScene* m_pScene;
     QGraphicsView* m_pView;
     CTestWidget* m_pTestWidget;
+    CTestWidget* m_pTestWidget1;
 };
 
 #endif // CTESTWINDOW_H

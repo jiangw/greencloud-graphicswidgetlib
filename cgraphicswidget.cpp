@@ -26,22 +26,55 @@ QRectF CGraphicsWidget::boundingRect() const
 
 void CGraphicsWidget::mousePressEvent(QGraphicsSceneMouseEvent *event)
 {
-    if(event->button() == Qt::LeftButton)
-    {
-        m_CMouseLastPos = event->pos();
-    }
+#ifdef PF_TEST
+    std::cout << "Mouse Press." << std::endl;
+#endif
+
+    m_CMouseLastPos = event->pos();
 }
 
 void CGraphicsWidget::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
 {
-    if(event->button() == Qt::LeftButton)
+#ifdef PF_TEST
+    std::cout << "Mouse Release." << std::endl;
+#endif
+
+    if(QLineF(event->pos(), m_CMouseLastPos).length() \
+            <= CGraphicsWidget::s_dMouseMoveDistThreshold) //mouse did not move
     {
-        if(QLineF(event->pos(), m_CMouseLastPos).length() \
-                < CGraphicsWidget::s_dMouseMoveDistThreshold)
-        {
+        if(event->button() == Qt::LeftButton)
+        { //left button clicked
             emit this->SIGNAL_LeftButtonClicked();
             emit this->SIGNAL_LeftButtonClicked(event->pos());
             this->LeftButtonClicked(event->pos());
         }
+        else if(event->button() == Qt::RightButton)
+        { //right button clicked
+            emit this->SIGNAL_RightButtonClicked();
+            emit this->SIGNAL_RightButtonClicked(event->pos());
+            this->RightButtonClicked(event->pos());
+        }
+    }
+    else
+    {
+        if(!this->contains(event->pos()))
+        {
+            emit this->SIGNAL_MouseDragRelease(this->mapToScene(event->pos()), this);
+        }
+        this->MouseDragRelease(event->pos());
+        this->setCursor(QCursor(Qt::ArrowCursor));
+    }
+}
+
+void CGraphicsWidget::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
+{
+#ifdef PF_TEST
+    std::cout << "Mouse Move." << std::endl;
+#endif
+    if(QLineF(event->pos(), m_CMouseLastPos).length() \
+            > CGraphicsWidget::s_dMouseMoveDistThreshold)
+    {
+        this->setCursor(QCursor(Qt::ClosedHandCursor));
+        this->MouseDragMove(event->pos());
     }
 }
