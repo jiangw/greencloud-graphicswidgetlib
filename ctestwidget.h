@@ -4,6 +4,11 @@
 #include "cgraphicswidget.h"
 
 #include <QString>
+#include <QBrush>
+#include <QPixmap>
+#include <QtSvg>
+#include <QSvgRenderer>
+#include <QPainter>
 
 class CTestWidget : public CGraphicsWidget
 {
@@ -32,6 +37,8 @@ private:
     QString m_qstrMsg;
     QString m_qstrWidgetName;
     int m_iWidth, m_iHeight;
+    QBrush m_CBrush;
+    QSvgRenderer* m_pSvgRender;
 };
 
 #endif // CTESTWIDGET_H

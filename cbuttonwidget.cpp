@@ -9,8 +9,9 @@ CButtonWidget::CButtonWidget(QString a_qstrText, CGraphicsWidget *a_pParent)
     m_qstrText = a_qstrText;
     m_iStrWidthExt = 8;
     m_iStrHeightExt = 4;
+    m_iTextFontSize = 14;
     m_CButtonFont.setFamily("Courier New");
-    m_CButtonFont.setPointSize(16);
+    m_CButtonFont.setPointSize(m_iTextFontSize);
     QFontMetrics l_CFontMetric(m_CButtonFont);
     QRectF l_CStrRect = l_CFontMetric.boundingRect(m_qstrText);
     m_iStrWidth = l_CStrRect.width();
@@ -29,6 +30,12 @@ void CButtonWidget::SetText(QString a_qstrText)
 
     this->prepareGeometryChange();
     this->UpdateBoundingRect(this->WidgetWidth(), this->WidgetHeight());
+}
+
+void CButtonWidget::SetTextFontSize(int a_iSize)
+{
+    m_CButtonFont.setPointSize(a_iSize);
+    this->SetText(m_qstrText);
 }
 
 int CButtonWidget::WidgetWidth()
@@ -53,7 +60,7 @@ void CButtonWidget::paint(QPainter *painter, const QStyleOptionGraphicsItem *opt
     painter->save();
 
     painter->setRenderHint(QPainter::Antialiasing);
-    painter->setPen(QPen(QBrush(Qt::black), 4));
+    painter->setPen(QPen(QBrush(Qt::black), 2));
     painter->setFont(m_CButtonFont);
     //draw outline
     painter->drawRoundedRect(this->boundingRect(), 5, 5);

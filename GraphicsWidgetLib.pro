@@ -4,7 +4,7 @@
 #
 #-------------------------------------------------
 
-QT       += core gui
+QT       += core gui svg
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
@@ -17,7 +17,8 @@ SOURCES += main.cpp \
     ctestwidget.cpp \
     cgraphicswidget.cpp \
     ccheckwidget.cpp \
-    cbuttonwidget.cpp
+    cbuttonwidget.cpp \
+    csvgwidget.cpp
 
 HEADERS  += \
     ctestwindow.h \
@@ -25,4 +26,5 @@ HEADERS  += \
     cgraphicswidget.h \
     gconfig.h \
     ccheckwidget.h \
-    cbuttonwidget.h
+    cbuttonwidget.h \
+    csvgwidget.h

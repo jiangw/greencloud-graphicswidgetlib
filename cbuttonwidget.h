@@ -16,6 +16,7 @@ public:
 
     CButtonWidget(QString a_qstrText, CGraphicsWidget* a_pParent);
     void SetText(QString a_qstrText);
+    void SetTextFontSize(int a_iSize);
 
     //override from CGraphicsWidget
     int WidgetWidth();
@@ -35,6 +36,7 @@ private:
     int m_iStrHeightExt;
     QString m_qstrText;
     QFont m_CButtonFont;
+    int m_iTextFontSize;
 };
 
 #endif // CBUTTONWIDGET_H

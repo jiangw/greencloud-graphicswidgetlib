@@ -8,6 +8,7 @@
 #include "ctestwidget.h"
 #include "ccheckwidget.h"
 #include "cbuttonwidget.h"
+#include "csvgwidget.h"
 
 class CTestWindow : public QMainWindow
 {

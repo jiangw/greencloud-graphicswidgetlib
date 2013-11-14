@@ -6,8 +6,25 @@ CTestWidget::CTestWidget(int a_iWidth, int a_iHeight, CGraphicsWidget *a_pParent
     m_iWidth = a_iWidth;
     m_iHeight = a_iHeight;
 
+//    QPixmap l_CPixmap;
+//    if(l_CPixmap.load("/home/jiang/GreenClouD/icon_edit.png"))
+//    {
+//        m_CBrush.setTexture(l_CPixmap.scaled(m_iWidth, m_iHeight));
+//    }
+//    else
+//    {
+//        std::cout << "Cannot load image." << std::endl;
+//    }
+
     this->InitBoundingRect(this->WidgetWidth(), this->WidgetHeight());
     m_qstrMsg = "Test Widget";
+
+    m_pSvgRender = new QSvgRenderer(QString("/home/jiang/GreenClouD/icon_edit.svg"), this);
+//    QPixmap l_CPixmap(80, 80);
+//    l_CPixmap.fill();
+//    QPainter l_CPainter(&l_CPixmap);
+//    m_pSvgRender->render(&l_CPainter);
+//    m_CBrush.setTexture(l_CPixmap);
 }
 
 void CTestWidget::SetWidgetName(QString a_qstrName)
@@ -33,8 +50,10 @@ void CTestWidget::paint(QPainter *painter, const QStyleOptionGraphicsItem *optio
     painter->save();
 
     painter->setRenderHint(QPainter::Antialiasing);
-    painter->drawRect(this->boundingRect());
-    painter->drawText(this->boundingRect(), Qt::AlignCenter, m_qstrMsg);
+//    painter->drawRect(this->boundingRect());
+//    painter->drawText(this->boundingRect(), Qt::AlignCenter, m_qstrMsg);
+//    painter->fillRect(this->boundingRect(), m_CBrush);
+    m_pSvgRender->render(painter, this->boundingRect());
 
     painter->restore();
 }
