@@ -15,10 +15,14 @@ TEMPLATE = app
 SOURCES += main.cpp \
     ctestwindow.cpp \
     ctestwidget.cpp \
-    cgraphicswidget.cpp
+    cgraphicswidget.cpp \
+    ccheckwidget.cpp \
+    cbuttonwidget.cpp
 
 HEADERS  += \
     ctestwindow.h \
     ctestwidget.h \
     cgraphicswidget.h \
-    gconfig.h
+    gconfig.h \
+    ccheckwidget.h \
+    cbuttonwidget.h

@@ -1,7 +1,8 @@
 #ifndef CGRAPHICSWIDGET_H
 #define CGRAPHICSWIDGET_H
 
-#include "gconfig.h"
+//#include "gconfig.h"
+#define PF_TEST
 
 #include <QObject>
 #include <QGraphicsItem>

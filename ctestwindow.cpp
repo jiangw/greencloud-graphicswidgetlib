@@ -22,10 +22,26 @@ CTestWindow::CTestWindow(QWidget *parent)
     connect(m_pTestWidget, SIGNAL(SIGNAL_MouseDragRelease(QPointF, CGraphicsWidget*)), \
             m_pTestWidget1, SLOT(SLOT_MouseDragDropProc(QPointF, CGraphicsWidget*)));
 
+//    m_pCheckWidget = new CCheckWidget(NULL);
+//    m_pCheckWidget->setPos(0, 60);
+//    m_pScene->addItem(m_pCheckWidget);
+
+    m_pButtonWidget = new CButtonWidget("Button triggered", NULL);
+    m_pButtonWidget->setPos(0, 60);
+    m_pScene->addItem(m_pButtonWidget);
+
+    connect(m_pButtonWidget, SIGNAL(SIGNAL_ButtonTriggered()),\
+            this, SLOT(SLOT_ButtonTriggeredProc()));
+
     this->setCentralWidget(m_pView);
 }
 
 CTestWindow::~CTestWindow()
 {
     
+}
+
+void CTestWindow::SLOT_ButtonTriggeredProc()
+{
+    m_pButtonWidget->SetText("OK");
 }

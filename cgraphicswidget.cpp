@@ -62,7 +62,7 @@ void CGraphicsWidget::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
             emit this->SIGNAL_MouseDragRelease(this->mapToScene(event->pos()), this);
         }
         this->MouseDragRelease(event->pos());
-        this->setCursor(QCursor(Qt::ArrowCursor));
+//        this->setCursor(QCursor(Qt::ArrowCursor));
     }
 }
 
@@ -74,7 +74,7 @@ void CGraphicsWidget::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
     if(QLineF(event->pos(), m_CMouseLastPos).length() \
             > CGraphicsWidget::s_dMouseMoveDistThreshold)
     {
-        this->setCursor(QCursor(Qt::ClosedHandCursor));
+//        this->setCursor(QCursor(Qt::ClosedHandCursor));
         this->MouseDragMove(event->pos());
     }
 }
