@@ -18,7 +18,10 @@ SOURCES += main.cpp \
     cgraphicswidget.cpp \
     ccheckwidget.cpp \
     cbuttonwidget.cpp \
-    csvgwidget.cpp
+    csvgwidget.cpp \
+    ctextwidget.cpp \
+    ctexteditor.cpp \
+    cwidgetlist.cpp
 
 HEADERS  += \
     ctestwindow.h \
@@ -27,4 +30,7 @@ HEADERS  += \
     gconfig.h \
     ccheckwidget.h \
     cbuttonwidget.h \
-    csvgwidget.h
+    csvgwidget.h \
+    ctextwidget.h \
+    ctexteditor.h \
+    cwidgetlist.h

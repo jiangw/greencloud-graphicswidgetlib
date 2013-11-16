@@ -12,11 +12,21 @@ void CGraphicsWidget::InitBoundingRect(int a_iWidth, int a_iHeight)
     m_CBR.setRect(0, 0, a_iWidth, a_iHeight);
 }
 
+void CGraphicsWidget::InitBoundingRect()
+{
+    this->InitBoundingRect(this->WidgetWidth(), this->WidgetHeight());
+}
+
 void CGraphicsWidget::UpdateBoundingRect(int a_iWidth, int a_iHeight)
 {
     this->prepareGeometryChange();
     m_CBR.setWidth(a_iWidth);
     m_CBR.setHeight(a_iHeight);
+}
+
+void CGraphicsWidget::UpdateBoundingRect()
+{
+    this->UpdateBoundingRect(this->WidgetWidth(), this->WidgetHeight());
 }
 
 QRectF CGraphicsWidget::boundingRect() const

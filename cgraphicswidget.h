@@ -24,7 +24,9 @@ class CGraphicsWidget : public QObject, public QGraphicsItem
 public:
     CGraphicsWidget(CGraphicsWidget* a_pParent);
     void InitBoundingRect(int a_iWidth, int a_iHeight);
+    void InitBoundingRect(); //overloaded function
     void UpdateBoundingRect(int a_iWidth, int a_iHeight);
+    void UpdateBoundingRect(); //overloaded function
     virtual int WidgetWidth() = 0;
     virtual int WidgetHeight() = 0;
     virtual QString WidgetClassName()\

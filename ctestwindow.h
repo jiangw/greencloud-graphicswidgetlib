@@ -9,6 +9,9 @@
 #include "ccheckwidget.h"
 #include "cbuttonwidget.h"
 #include "csvgwidget.h"
+#include "ctexteditor.h"
+#include "ctextwidget.h"
+#include "cwidgetlist.h"
 
 class CTestWindow : public QMainWindow
 {
@@ -28,6 +31,9 @@ private:
     CTestWidget* m_pTestWidget1;
     CCheckWidget* m_pCheckWidget;
     CButtonWidget* m_pButtonWidget;
+    CTextEditor* m_pTextEditor;
+    CTextWidget* m_pTextWidget;
+    CWidgetList* m_pWidgetList;
 };
 
 #endif // CTESTWINDOW_H
