@@ -6,10 +6,17 @@ CWidgetList::CWidgetList(CGraphicsWidget *a_pParent)
     m_EOrient = VERTICAL;
     m_iWidgetSpacingX = 10;
     m_iWidgetSpacingY = 10;
-    m_iHeaderWidth = 200;
-    m_iHeaderHeight = 25;
     m_pWidgetListHead = NULL;
-    m_qstrTitle = "Widgets List";
+    m_blMouseEventPropFlag = true;
+
+    CTextWidget* l_pLabel = new CTextWidget(false, this);
+    l_pLabel->SetWidgetOutline(false);
+    l_pLabel->SetText("Widgets List");
+    l_pLabel->SetFont(QFont("Courier New", 12));
+    l_pLabel->setPos(0, 0);
+    m_iHeaderWidth = l_pLabel->boundingRect().width() * 1.5;
+    m_iHeaderHeight = l_pLabel->boundingRect().height();
+    m_pHeaderWidget = l_pLabel;
 
     this->InitBoundingRect(this->WidgetWidth(), this->WidgetHeight());
 }
@@ -73,10 +80,27 @@ void CWidgetList::SetListOrientation(EListOrientation a_EOrientation)
     }
 }
 
-void CWidgetList::SetListTitle(QString a_qstrTitle)
+void CWidgetList::SetHeaderWidget(CGraphicsWidget *a_pHeaderWidget)
 {
-    m_qstrTitle = a_qstrTitle;
-    update(0, 0, m_iHeaderWidth, m_iHeaderHeight);
+    //remove old header widget
+    this->RemoveWidgetFromScene(m_pHeaderWidget);
+
+    //set new header widget
+    m_pHeaderWidget = a_pHeaderWidget;
+    m_pHeaderWidget->setParentItem(this);
+    m_pHeaderWidget->setPos(0, 0);
+    m_iHeaderWidth = m_pHeaderWidget->boundingRect().width() * 1.5;
+    m_iHeaderHeight = m_pHeaderWidget->boundingRect().height();
+
+    //update
+//    prepareGeometryChange();
+    this->UpdateBoundingRect(this->WidgetWidth(), this->WidgetHeight());
+    update(this->boundingRect());
+}
+
+CGraphicsWidget* CWidgetList::GetHeaderWidget()
+{
+    return m_pHeaderWidget;
 }
 
 void CWidgetList::SetHeaderSize(int a_iWidth, int a_iHeight)
@@ -91,6 +115,11 @@ void CWidgetList::SetHeaderSize(int a_iWidth, int a_iHeight)
 CWidgetNode* CWidgetList::GetWidgetList()
 {
     return m_pWidgetListHead;
+}
+
+void CWidgetList::PropagateMouseEventToChildren(bool a_blFlag)
+{
+    m_blMouseEventPropFlag = a_blFlag;
 }
 
 int CWidgetList::WidgetWidth()
@@ -155,17 +184,30 @@ void CWidgetList::paint(QPainter *painter,\
     Q_UNUSED(option)
     Q_UNUSED(widget)
 
-    painter->drawText(5, 0, m_iHeaderWidth, m_iHeaderHeight, Qt::AlignLeft | Qt::AlignBottom,\
-                      m_qstrTitle);
-    painter->drawLine(QPointF(0, m_iHeaderHeight), QPointF(m_iHeaderWidth, m_iHeaderHeight));
-    painter->drawRect(this->boundingRect());
+    painter->drawLine(QPointF(0, m_iHeaderHeight),\
+                      QPointF(this->boundingRect().width(), m_iHeaderHeight));
+    painter->drawRect(0, m_iHeaderHeight, this->boundingRect().width(),\
+                      this->boundingRect().height() - m_iHeaderHeight);
+}
+
+void CWidgetList::mousePressEvent(QGraphicsSceneMouseEvent *event)
+{
+    if(m_blMouseEventPropFlag)
+    {
+        event->ignore();
+    }
+    else
+    {
+        CGraphicsWidget::mousePressEvent(event);
+    }
 }
 
 void CWidgetList::SLOT_AddWidget(CGraphicsWidget* a_pNewWidget)
 {
     if(NULL != a_pNewWidget)
     {
-        a_pNewWidget->setParent(this);
+        a_pNewWidget->setFlag(QGraphicsItem::ItemStacksBehindParent);
+        a_pNewWidget->setParentItem(this);
         CWidgetNode* l_pNewNode = new CWidgetNode();
         l_pNewNode->m_pWidget = a_pNewWidget;
         l_pNewNode->m_pNext = NULL;
@@ -271,9 +313,22 @@ void CWidgetList::SLOT_RemoveWidget(CGraphicsWidget* a_pDelWidget)
         }
 
         delete l_pDelNode;
-        emit SIGNAL_RemoveWidgetFromScene(a_pDelWidget);
+        this->RemoveWidgetFromScene(a_pDelWidget);
 
         prepareGeometryChange();
         this->UpdateBoundingRect(this->WidgetWidth(), this->WidgetHeight());
+    }
+}
+
+void CWidgetList::RemoveWidgetFromScene(CGraphicsWidget *a_pDelWidget)
+{
+    if(NULL == this->scene())
+    {
+        a_pDelWidget->setVisible(false);
+        emit this->SIGNAL_RemoveWidgetFromScene(a_pDelWidget);
+    }
+    else
+    {
+        this->scene()->removeItem(a_pDelWidget);
     }
 }

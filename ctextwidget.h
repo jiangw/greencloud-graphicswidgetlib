@@ -17,9 +17,11 @@ public:
     CTextWidget(bool a_blEditable, CGraphicsWidget* a_pParent);
     void SetEditable(bool a_blEditable);
     void SetFontSize(int a_iFontSize);
+    void SetFont(QFont a_CFont);
     void SetInputTip(QString a_qstrTip);
     void SetFixedSize(int a_iFixedWidth, int a_iFixedHeight);
     void SetWidgetOutline(bool a_blHasOutline);
+    void SetWidgetUnderline(bool a_blHasUnderline);
     void SetText(QString a_qstrText);
     QString GetText();
 
@@ -42,6 +44,7 @@ private:
 
     bool m_blSizeFixed;
     bool m_blHasOutline;
+    bool m_blHasUnderline;
     int m_iTextWidth, m_iTextHeight, m_iTextWidthExt, m_iTextHeightExt;
 
     CTextEditor* m_pTextEditor;

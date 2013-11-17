@@ -5,6 +5,7 @@ CTextWidget::CTextWidget(bool a_blEditable, CGraphicsWidget *a_pParent)
 {
     m_blSizeFixed = false;
     m_blHasOutline = true;
+    m_blHasUnderline = false;
     m_iFontSize = 12;
     m_iTextWidthExt = 10;
     m_iTextHeightExt = 9;
@@ -47,6 +48,12 @@ void CTextWidget::SetFontSize(int a_iFontSize)
     this->TextChanged();
 }
 
+void CTextWidget::SetFont(QFont a_CFont)
+{
+    m_CTextFont = a_CFont;
+    this->TextChanged();
+}
+
 void CTextWidget::SetInputTip(QString a_qstrTip)
 {
     m_qstrTip = a_qstrTip;
@@ -66,6 +73,12 @@ void CTextWidget::SetFixedSize(int a_iFixedWidth, int a_iFixedHeight)
 void CTextWidget::SetWidgetOutline(bool a_blHasOutline)
 {
     m_blHasOutline = a_blHasOutline;
+    update(this->boundingRect());
+}
+
+void CTextWidget::SetWidgetUnderline(bool a_blHasUnderline)
+{
+    m_blHasUnderline = a_blHasUnderline;
     update(this->boundingRect());
 }
 
@@ -101,6 +114,17 @@ void CTextWidget::paint(QPainter *painter, const QStyleOptionGraphicsItem *optio
     if(m_blHasOutline)
     {
         painter->drawRoundedRect(this->boundingRect(), 5, 5);
+    }
+    if(m_blHasUnderline)
+    {
+        painter->save();
+
+        painter->setRenderHint(QPainter::Antialiasing);
+        painter->setPen(QPen(QBrush(Qt::black), 2));
+        painter->drawLine(0, this->boundingRect().height() - 3, this->boundingRect().width(),\
+                          this->boundingRect().height() - 3);
+
+        painter->restore();
     }
     QString l_qstrText;
     if(0 == this->GetTextType())
