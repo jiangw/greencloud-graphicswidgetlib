@@ -12,6 +12,7 @@
 #include "ctexteditor.h"
 #include "ctextwidget.h"
 #include "cwidgetlist.h"
+#include "cimgwidget.h"
 
 class CTestWindow : public QMainWindow
 {
@@ -34,6 +35,7 @@ private:
     CTextEditor* m_pTextEditor;
     CTextWidget* m_pTextWidget;
     CWidgetList* m_pWidgetList;
+    CImgWidget* m_pImgWidget;
 };
 
 #endif // CTESTWINDOW_H

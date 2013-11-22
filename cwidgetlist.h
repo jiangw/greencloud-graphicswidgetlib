@@ -22,6 +22,7 @@ public:
 
     CWidgetList(CGraphicsWidget* a_pParent);
     ~CWidgetList();
+    void ResetWidget();
     void ClearList();
     void SetListOrientation(EListOrientation a_EOrientation);
     void SetHeaderSize(int a_iWidth, int a_iHeight);
@@ -29,6 +30,12 @@ public:
     CGraphicsWidget* GetHeaderWidget();
     CWidgetNode* GetWidgetList();
     void PropagateMouseEventToChildren(bool a_blFlag);
+    void AddWidget(CGraphicsWidget* a_pNewWidget);
+    void SetNewWidgetPos(CGraphicsWidget* a_pPrev, CGraphicsWidget* a_pNew);
+    void RemoveWidget(CGraphicsWidget* a_pDelWidget);
+    void SetWidgetOutline(bool a_blHasOutline);
+    bool Collapse();
+    void SetCollapse(bool a_blCollapse);
 
     //override from CGraphicsWidget
     int WidgetWidth();
@@ -42,6 +49,7 @@ protected:
 public slots:
     void SLOT_AddWidget(CGraphicsWidget* a_pNewWidget);
     void SLOT_RemoveWidget(CGraphicsWidget* a_pDelWidget);
+    void SLOT_WidgetSizeChangeProc();
 
 signals:
     void SIGNAL_RemoveWidgetFromScene(CGraphicsWidget* a_pDelWidget);
@@ -56,6 +64,9 @@ private:
     CWidgetNode* m_pWidgetListHead;
     CGraphicsWidget* m_pHeaderWidget;
     bool m_blMouseEventPropFlag; //true(default): propagate to children. false: do not propagate
+
+    bool m_blHasOutline;
+    bool m_blCollapse;
 };
 
 #endif // CWIDGETLIST_H

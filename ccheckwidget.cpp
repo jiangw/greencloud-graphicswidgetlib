@@ -8,6 +8,11 @@ CCheckWidget::CCheckWidget(CGraphicsWidget *a_pParent)
     this->InitBoundingRect(this->WidgetWidth(), this->WidgetHeight());
 }
 
+void CCheckWidget::SetChecked(bool a_blIsChecked)
+{
+    m_blChecked = a_blIsChecked;
+}
+
 void CCheckWidget::BoundingWithWidget(CGraphicsWidget *a_pBoundingWidget)
 {
     m_pBoundingWidget = a_pBoundingWidget;

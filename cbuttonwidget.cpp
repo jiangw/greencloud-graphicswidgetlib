@@ -28,7 +28,6 @@ void CButtonWidget::SetText(QString a_qstrText)
     m_iStrWidth = l_CStrRect.width();
     m_iStrHeight = l_CStrRect.height();
 
-    this->prepareGeometryChange();
     this->UpdateBoundingRect(this->WidgetWidth(), this->WidgetHeight());
 }
 

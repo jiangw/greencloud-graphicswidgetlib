@@ -66,7 +66,6 @@ void CTextWidget::SetFixedSize(int a_iFixedWidth, int a_iFixedHeight)
     m_iTextWidth = a_iFixedWidth;
     m_iTextHeight = a_iFixedHeight;
 
-    prepareGeometryChange();
     this->UpdateBoundingRect();
 }
 
@@ -144,6 +143,18 @@ void CTextWidget::paint(QPainter *painter, const QStyleOptionGraphicsItem *optio
     painter->restore();
 }
 
+void CTextWidget::mousePressEvent(QGraphicsSceneMouseEvent *event)
+{
+    if(m_blEditable)
+    {
+        CGraphicsWidget::mousePressEvent(event);
+    }
+    else
+    {
+        event->ignore();
+    }
+}
+
 void CTextWidget::LeftButtonClicked(QPointF a_CMousePos)
 {
     Q_UNUSED(a_CMousePos)
@@ -180,27 +191,28 @@ int CTextWidget::GetTextType()
 
 void CTextWidget::TextChanged()
 {
+    QString l_qstrText;
+    QFont l_CFont;
+    if(0 == this->GetTextType())
+    {
+        l_qstrText = m_qstrTip;
+        l_CFont = m_CTipFont;
+    }
+    else
+    {
+        l_qstrText = m_qstrText;
+        l_CFont = m_CTextFont;
+    }
+
+    QFontMetrics l_CFontMetrics(l_CFont);
+    QRectF l_CBR = l_CFontMetrics.boundingRect(l_qstrText);
     if(!m_blSizeFixed)
     {
-        QString l_qstrText;
-        QFont l_CFont;
-        if(0 == this->GetTextType())
-        {
-            l_qstrText = m_qstrTip;
-            l_CFont = m_CTipFont;
-        }
-        else
-        {
-            l_qstrText = m_qstrText;
-            l_CFont = m_CTextFont;
-        }
-
-        QFontMetrics l_CFontMetrics(l_CFont);
-        QRectF l_CBR = l_CFontMetrics.boundingRect(l_qstrText);
         m_iTextWidth = l_CBR.width();
         m_iTextHeight = l_CBR.height();
 
-        prepareGeometryChange();
         this->UpdateBoundingRect();
     }
+
+    update(this->boundingRect());
 }

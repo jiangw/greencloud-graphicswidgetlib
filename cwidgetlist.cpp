@@ -8,6 +8,8 @@ CWidgetList::CWidgetList(CGraphicsWidget *a_pParent)
     m_iWidgetSpacingY = 10;
     m_pWidgetListHead = NULL;
     m_blMouseEventPropFlag = true;
+    m_blHasOutline = true;
+    m_blCollapse = false;
 
     CTextWidget* l_pLabel = new CTextWidget(false, this);
     l_pLabel->SetWidgetOutline(false);
@@ -24,6 +26,19 @@ CWidgetList::CWidgetList(CGraphicsWidget *a_pParent)
 CWidgetList::~CWidgetList()
 {
     this->ClearList();
+}
+
+void CWidgetList::ResetWidget()
+{
+    CWidgetNode* l_pWidgetNode = m_pWidgetListHead;
+    while(l_pWidgetNode)
+    {
+        this->SLOT_RemoveWidget(l_pWidgetNode->m_pWidget);
+        l_pWidgetNode = l_pWidgetNode->m_pNext;
+    }
+    this->ClearList();
+
+    this->UpdateBoundingRect();
 }
 
 void CWidgetList::ClearList()
@@ -74,7 +89,6 @@ void CWidgetList::SetListOrientation(EListOrientation a_EOrientation)
                 }
             }
 
-            prepareGeometryChange();
             this->UpdateBoundingRect(this->WidgetWidth(), this->WidgetHeight());
         }
     }
@@ -93,7 +107,6 @@ void CWidgetList::SetHeaderWidget(CGraphicsWidget *a_pHeaderWidget)
     m_iHeaderHeight = m_pHeaderWidget->boundingRect().height();
 
     //update
-//    prepareGeometryChange();
     this->UpdateBoundingRect(this->WidgetWidth(), this->WidgetHeight());
     update(this->boundingRect());
 }
@@ -108,7 +121,6 @@ void CWidgetList::SetHeaderSize(int a_iWidth, int a_iHeight)
     m_iHeaderWidth = a_iWidth;
     m_iHeaderHeight = a_iHeight;
 
-    prepareGeometryChange();
     this->UpdateBoundingRect(this->WidgetWidth(), this->WidgetHeight());
 }
 
@@ -125,22 +137,25 @@ void CWidgetList::PropagateMouseEventToChildren(bool a_blFlag)
 int CWidgetList::WidgetWidth()
 {
     int l_iWidth = 0;
-    CWidgetNode* l_pWidgetNode = m_pWidgetListHead;
-    while(l_pWidgetNode)
+    if(!m_blCollapse)
     {
-        CGraphicsWidget* l_pWidget = l_pWidgetNode->m_pWidget;
-        if(HORIZONTAL == m_EOrient)
+        CWidgetNode* l_pWidgetNode = m_pWidgetListHead;
+        while(l_pWidgetNode)
         {
-            l_iWidth += l_pWidget->boundingRect().width() + m_iWidgetSpacingX;
-        }
-        else
-        {
-            if(l_pWidget->boundingRect().width() > l_iWidth)
+            CGraphicsWidget* l_pWidget = l_pWidgetNode->m_pWidget;
+            if(HORIZONTAL == m_EOrient)
             {
-                l_iWidth = l_pWidget->boundingRect().width();
+                l_iWidth += l_pWidget->boundingRect().width() + m_iWidgetSpacingX;
             }
+            else
+            {
+                if(l_pWidget->boundingRect().width() > l_iWidth)
+                {
+                    l_iWidth = l_pWidget->boundingRect().width() + m_iWidgetSpacingX;
+                }
+            }
+            l_pWidgetNode = l_pWidgetNode->m_pNext;
         }
-        l_pWidgetNode = l_pWidgetNode->m_pNext;
     }
     if(l_iWidth < m_iHeaderWidth)
     {
@@ -153,22 +168,25 @@ int CWidgetList::WidgetWidth()
 int CWidgetList::WidgetHeight()
 {
     int l_iHeight = 0;
-    CWidgetNode* l_pWidgetNode = m_pWidgetListHead;
-    while(l_pWidgetNode)
+    if(!m_blCollapse)
     {
-        CGraphicsWidget* l_pWidget = l_pWidgetNode->m_pWidget;
-        if(HORIZONTAL == m_EOrient)
+        CWidgetNode* l_pWidgetNode = m_pWidgetListHead;
+        while(l_pWidgetNode)
         {
-            if(l_pWidget->boundingRect().height() > l_iHeight)
+            CGraphicsWidget* l_pWidget = l_pWidgetNode->m_pWidget;
+            if(HORIZONTAL == m_EOrient)
             {
-                l_iHeight = l_pWidget->boundingRect().height();
+                if(l_pWidget->boundingRect().height() > l_iHeight)
+                {
+                    l_iHeight = l_pWidget->boundingRect().height();
+                }
             }
+            else
+            {
+                l_iHeight += l_pWidget->boundingRect().height() + m_iWidgetSpacingY;
+            }
+            l_pWidgetNode = l_pWidgetNode->m_pNext;
         }
-        else
-        {
-            l_iHeight += l_pWidget->boundingRect().height() + m_iWidgetSpacingY;
-        }
-        l_pWidgetNode = l_pWidgetNode->m_pNext;
     }
     return l_iHeight + m_iHeaderHeight;
 }
@@ -186,8 +204,11 @@ void CWidgetList::paint(QPainter *painter,\
 
     painter->drawLine(QPointF(0, m_iHeaderHeight),\
                       QPointF(this->boundingRect().width(), m_iHeaderHeight));
-    painter->drawRect(0, m_iHeaderHeight, this->boundingRect().width(),\
-                      this->boundingRect().height() - m_iHeaderHeight);
+    if(m_blHasOutline)
+    {
+        painter->drawRect(0, m_iHeaderHeight, this->boundingRect().width(),\
+                          this->boundingRect().height() - m_iHeaderHeight);
+    }
 }
 
 void CWidgetList::mousePressEvent(QGraphicsSceneMouseEvent *event)
@@ -202,7 +223,7 @@ void CWidgetList::mousePressEvent(QGraphicsSceneMouseEvent *event)
     }
 }
 
-void CWidgetList::SLOT_AddWidget(CGraphicsWidget* a_pNewWidget)
+void CWidgetList::AddWidget(CGraphicsWidget* a_pNewWidget)
 {
     if(NULL != a_pNewWidget)
     {
@@ -211,6 +232,10 @@ void CWidgetList::SLOT_AddWidget(CGraphicsWidget* a_pNewWidget)
         CWidgetNode* l_pNewNode = new CWidgetNode();
         l_pNewNode->m_pWidget = a_pNewWidget;
         l_pNewNode->m_pNext = NULL;
+        connect(a_pNewWidget, SIGNAL(SIGNAL_RemoveWidget(CGraphicsWidget*)),\
+                this, SLOT(SLOT_RemoveWidget(CGraphicsWidget*)));
+        connect(a_pNewWidget, SIGNAL(SIGNAL_WidgetSizeChanged()),\
+                this, SLOT(SLOT_WidgetSizeChangeProc()));
 
         CGraphicsWidget* l_pNewWidget = a_pNewWidget;
 
@@ -231,28 +256,37 @@ void CWidgetList::SLOT_AddWidget(CGraphicsWidget* a_pNewWidget)
 
             //set widget position
             CGraphicsWidget* l_pPrevWidget = l_pTail->m_pWidget;
-            if(HORIZONTAL == m_EOrient)
-            {
-                l_pNewWidget->setPos(l_pPrevWidget->pos().x()\
-                                     + l_pPrevWidget->boundingRect().width()\
-                                     + m_iWidgetSpacingX,\
-                                     l_pPrevWidget->pos().y());
-            }
-            else
-            {
-                l_pNewWidget->setPos(l_pPrevWidget->pos().x(),\
-                                     l_pPrevWidget->pos().y()\
-                                     + l_pPrevWidget->boundingRect().height()\
-                                     + m_iWidgetSpacingY);
-            }
+            this->SetNewWidgetPos(l_pPrevWidget, l_pNewWidget);
         }
 
-        prepareGeometryChange();
         this->UpdateBoundingRect(this->WidgetWidth(), this->WidgetHeight());
     }
 }
 
-void CWidgetList::SLOT_RemoveWidget(CGraphicsWidget* a_pDelWidget)
+void CWidgetList::SLOT_AddWidget(CGraphicsWidget *a_pNewWidget)
+{
+    this->AddWidget(a_pNewWidget);
+}
+
+void CWidgetList::SetNewWidgetPos(CGraphicsWidget *a_pPrev, CGraphicsWidget *a_pNew)
+{
+    if(HORIZONTAL == m_EOrient)
+    {
+        a_pNew->setPos(a_pPrev->pos().x()\
+                             + a_pPrev->boundingRect().width()\
+                             + m_iWidgetSpacingX,\
+                             a_pPrev->pos().y());
+    }
+    else
+    {
+        a_pNew->setPos(a_pPrev->pos().x(),\
+                             a_pPrev->pos().y()\
+                             + a_pPrev->boundingRect().height()\
+                             + m_iWidgetSpacingY);
+    }
+}
+
+void CWidgetList::RemoveWidget(CGraphicsWidget* a_pDelWidget)
 {
     CWidgetNode* l_pDelNode = NULL;
     CWidgetNode* l_pDelNodePrev = NULL;
@@ -309,15 +343,62 @@ void CWidgetList::SLOT_RemoveWidget(CGraphicsWidget* a_pDelWidget)
                                       + l_pPrevWidget->boundingRect().height()\
                                       + m_iWidgetSpacingY);
             }
+            l_pPrevWidget = l_pCurrWidget;
             l_pWidgetNode = l_pWidgetNode->m_pNext;
         }
 
         delete l_pDelNode;
         this->RemoveWidgetFromScene(a_pDelWidget);
 
-        prepareGeometryChange();
         this->UpdateBoundingRect(this->WidgetWidth(), this->WidgetHeight());
     }
+}
+
+void CWidgetList::SetWidgetOutline(bool a_blHasOutline)
+{
+    m_blHasOutline = a_blHasOutline;
+    update(this->boundingRect());
+}
+
+bool CWidgetList::Collapse()
+{
+    return m_blCollapse;
+}
+
+void CWidgetList::SetCollapse(bool a_blCollapse)
+{
+    m_blCollapse = a_blCollapse;
+    CWidgetNode* l_pWidgetNode = m_pWidgetListHead;
+    while(l_pWidgetNode)
+    {
+        l_pWidgetNode->m_pWidget->setVisible(!m_blCollapse);
+        l_pWidgetNode = l_pWidgetNode->m_pNext;
+    }
+    this->UpdateBoundingRect();
+}
+
+void CWidgetList::SLOT_RemoveWidget(CGraphicsWidget *a_pDelWidget)
+{
+    this->RemoveWidget(a_pDelWidget);
+}
+
+void CWidgetList::SLOT_WidgetSizeChangeProc()
+{
+    CWidgetNode* l_pWidgetNode = m_pWidgetListHead;
+    CWidgetNode* l_pWidgetNodePrev = NULL;
+    while(l_pWidgetNode)
+    {
+        if(l_pWidgetNode != m_pWidgetListHead)
+        {
+            CGraphicsWidget* l_pPrev = l_pWidgetNodePrev->m_pWidget;
+            CGraphicsWidget* l_pCurr = l_pWidgetNode->m_pWidget;
+            this->SetNewWidgetPos(l_pPrev, l_pCurr);
+        }
+
+        l_pWidgetNodePrev = l_pWidgetNode;
+        l_pWidgetNode = l_pWidgetNode->m_pNext;
+    }
+    this->UpdateBoundingRect();
 }
 
 void CWidgetList::RemoveWidgetFromScene(CGraphicsWidget *a_pDelWidget)

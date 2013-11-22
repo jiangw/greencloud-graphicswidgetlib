@@ -10,6 +10,9 @@ class CCheckWidget : public CGraphicsWidget
 public:
     CCheckWidget(CGraphicsWidget* a_pParent);
 
+    void SetChecked(bool a_blIsChecked);
+    bool IsChecked()\
+    {return m_blChecked;}
     void BoundingWithWidget(CGraphicsWidget* a_pBoundingWidget);
 
     //override from CGraphicsWidget

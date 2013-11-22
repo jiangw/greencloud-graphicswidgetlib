@@ -33,6 +33,7 @@ public:
 protected:
     //override from CGraphicsWidget
     void LeftButtonClicked(QPointF a_CMousePos);
+    void mousePressEvent(QGraphicsSceneMouseEvent *event);
 
 public slots:
     void SLOT_EditFinishProc();

@@ -22,6 +22,7 @@ void CGraphicsWidget::UpdateBoundingRect(int a_iWidth, int a_iHeight)
     this->prepareGeometryChange();
     m_CBR.setWidth(a_iWidth);
     m_CBR.setHeight(a_iHeight);
+    emit this->SIGNAL_WidgetSizeChanged();
 }
 
 void CGraphicsWidget::UpdateBoundingRect()
@@ -36,19 +37,11 @@ QRectF CGraphicsWidget::boundingRect() const
 
 void CGraphicsWidget::mousePressEvent(QGraphicsSceneMouseEvent *event)
 {
-#ifdef PF_TEST
-    std::cout << "Mouse Press." << std::endl;
-#endif
-
     m_CMouseLastPos = event->pos();
 }
 
 void CGraphicsWidget::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
 {
-#ifdef PF_TEST
-    std::cout << "Mouse Release." << std::endl;
-#endif
-
     if(QLineF(event->pos(), m_CMouseLastPos).length() \
             <= CGraphicsWidget::s_dMouseMoveDistThreshold) //mouse did not move
     {
@@ -72,19 +65,20 @@ void CGraphicsWidget::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
             emit this->SIGNAL_MouseDragRelease(this->mapToScene(event->pos()), this);
         }
         this->MouseDragRelease(event->pos());
-//        this->setCursor(QCursor(Qt::ArrowCursor));
     }
 }
 
 void CGraphicsWidget::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
 {
-#ifdef PF_TEST
-    std::cout << "Mouse Move." << std::endl;
-#endif
     if(QLineF(event->pos(), m_CMouseLastPos).length() \
             > CGraphicsWidget::s_dMouseMoveDistThreshold)
     {
-//        this->setCursor(QCursor(Qt::ClosedHandCursor));
         this->MouseDragMove(event->pos());
     }
+}
+
+void CGraphicsWidget::mouseDoubleClickEvent(QGraphicsSceneMouseEvent *event)
+{
+    emit this->SIGNAL_MouseDoubleClicked();
+    emit this->SIGNAL_MouseDoubleClicked(event->pos());
 }

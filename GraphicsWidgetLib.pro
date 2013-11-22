@@ -21,7 +21,8 @@ SOURCES += main.cpp \
     csvgwidget.cpp \
     ctextwidget.cpp \
     ctexteditor.cpp \
-    cwidgetlist.cpp
+    cwidgetlist.cpp \
+    cimgwidget.cpp
 
 HEADERS  += \
     ctestwindow.h \
@@ -33,4 +34,5 @@ HEADERS  += \
     csvgwidget.h \
     ctextwidget.h \
     ctexteditor.h \
-    cwidgetlist.h
+    cwidgetlist.h \
+    cimgwidget.h

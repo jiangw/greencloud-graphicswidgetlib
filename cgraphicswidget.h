@@ -1,9 +1,6 @@
 #ifndef CGRAPHICSWIDGET_H
 #define CGRAPHICSWIDGET_H
 
-//#include "gconfig.h"
-#define PF_TEST
-
 #include <QObject>
 #include <QGraphicsItem>
 #include <QRectF>
@@ -13,9 +10,7 @@
 #include <QGraphicsSceneMouseEvent>
 #include <QCursor>
 
-#ifdef PF_TEST
 #include <iostream>
-#endif
 
 class CGraphicsWidget : public QObject, public QGraphicsItem
 {
@@ -23,6 +18,7 @@ class CGraphicsWidget : public QObject, public QGraphicsItem
 
 public:
     CGraphicsWidget(CGraphicsWidget* a_pParent);
+    virtual void ResetWidget(){}
     void InitBoundingRect(int a_iWidth, int a_iHeight);
     void InitBoundingRect(); //overloaded function
     void UpdateBoundingRect(int a_iWidth, int a_iHeight);
@@ -50,13 +46,20 @@ protected:
     void mousePressEvent(QGraphicsSceneMouseEvent *event);
     void mouseReleaseEvent(QGraphicsSceneMouseEvent *event);
     void mouseMoveEvent(QGraphicsSceneMouseEvent *event);
+    void mouseDoubleClickEvent(QGraphicsSceneMouseEvent *event);
 
 signals:
     void SIGNAL_LeftButtonClicked();
     void SIGNAL_LeftButtonClicked(QPointF a_CMousePos);
     void SIGNAL_RightButtonClicked();
     void SIGNAL_RightButtonClicked(QPointF a_CMousePos);
+    void SIGNAL_MouseDoubleClicked();
+    void SIGNAL_MouseDoubleClicked(QPointF a_CMousePos);
     void SIGNAL_MouseDragRelease(QPointF a_CMouseScenePos, CGraphicsWidget* a_pWhoAmI);
+
+    void SIGNAL_RemoveWidget(CGraphicsWidget* a_pRemoveWidget);
+
+    void SIGNAL_WidgetSizeChanged();
 
 private:
     QRectF m_CBR;
