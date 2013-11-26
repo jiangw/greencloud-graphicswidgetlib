@@ -1,0 +1,8 @@
+<RCC>
+    <qresource prefix="/icon">
+        <file alias="brush_add">res/brush_add.png</file>
+    </qresource>
+    <qresource prefix="/img">
+        <file alias="defaultcover">res/defaultcover.png</file>
+    </qresource>
+</RCC>

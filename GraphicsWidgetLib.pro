@@ -36,3 +36,6 @@ HEADERS  += \
     ctexteditor.h \
     cwidgetlist.h \
     cimgwidget.h
+
+RESOURCES += \
+    res.qrc

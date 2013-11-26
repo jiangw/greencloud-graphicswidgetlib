@@ -520,7 +520,7 @@ void CWidgetList::PageUpdate()
     CWidgetNode* l_pWidgetNode = m_pWidgetListHead;
     CWidgetNode* l_pPrevNode = NULL;
     int l_iPos = 1;
-    int l_iFirstShowPos = 1;
+    int l_iFirstShowPos = -1;
     bool l_blShowWidget;
     while(l_pWidgetNode)
     {
@@ -544,25 +544,31 @@ void CWidgetList::PageUpdate()
         {
             l_blShowWidget = true;
         }*/
-        if(l_iPos < m_iPageCurrPos)
+        if(l_iPos <= m_iPageCurrPos)
         {
-            if(abs(l_iPos - m_iPageCurrPos) + 1 <= m_iPageLength)
+            if(m_iPageCurrPos - l_iPos + 1 <= m_iPageLength)
             {
                 l_blShowWidget = true;
-                l_iFirstShowPos = l_iPos;
+                if(-1 == l_iFirstShowPos)
+                {
+                    l_iFirstShowPos = l_iPos;
+                }
             }
             else
             {
                 l_blShowWidget = false;
             }
         }
-        else if(l_iPos >= l_iFirstShowPos + m_iPageLength)
-        {
-            l_blShowWidget = false;
-        }
         else
         {
-            l_blShowWidget = true;
+            if(l_iPos - l_iFirstShowPos + 1 <= m_iPageLength)
+            {
+                l_blShowWidget = true;
+            }
+            else
+            {
+                l_blShowWidget = false;
+            }
         }
 
         if(l_blShowWidget)
