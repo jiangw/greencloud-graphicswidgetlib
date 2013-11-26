@@ -6,6 +6,7 @@ CSvgWidget::CSvgWidget(QString a_qstrSvgFile, int a_iWidgetWidth, int a_iWidgetH
 {
     m_iWidth = a_iWidgetWidth;
     m_iHeight = a_iWidgetHeight;
+    m_qstrFileName = a_qstrSvgFile;
     this->InitBoundingRect(m_iWidth, m_iHeight);
 
     m_pSvgRender = new QSvgRenderer(a_qstrSvgFile, this);

@@ -82,3 +82,9 @@ void CGraphicsWidget::mouseDoubleClickEvent(QGraphicsSceneMouseEvent *event)
     emit this->SIGNAL_MouseDoubleClicked();
     emit this->SIGNAL_MouseDoubleClicked(event->pos());
 }
+
+void CGraphicsWidget::wheelEvent(QGraphicsSceneWheelEvent *event)
+{
+    this->WheelScroll(event->delta() / 120);
+    emit this->SIGNAL_WheelScroll(event->delta() / 120);
+}

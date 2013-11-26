@@ -27,6 +27,8 @@ public:
     virtual int WidgetHeight() = 0;
     virtual QString WidgetClassName()\
     {return "CGraphicsWidget";} //return the class name of this widget
+    virtual void Hightlight(bool a_blHightlight)\
+    {Q_UNUSED(a_blHightlight)}//highlight widget
 
     static qreal s_dMouseMoveDistThreshold;
 
@@ -42,11 +44,14 @@ protected:
     {Q_UNUSED(a_CMousePos)}
     virtual void MouseDragRelease(QPointF a_CMousePos)\
     {Q_UNUSED(a_CMousePos)} //process mouse drag release event of the widget itself
+    virtual void WheelScroll(int a_iSteps)\
+    {Q_UNUSED(a_iSteps)}
     //override from QGraphicsItem
     void mousePressEvent(QGraphicsSceneMouseEvent *event);
     void mouseReleaseEvent(QGraphicsSceneMouseEvent *event);
     void mouseMoveEvent(QGraphicsSceneMouseEvent *event);
     void mouseDoubleClickEvent(QGraphicsSceneMouseEvent *event);
+    void wheelEvent(QGraphicsSceneWheelEvent *event);
 
 signals:
     void SIGNAL_LeftButtonClicked();
@@ -56,6 +61,7 @@ signals:
     void SIGNAL_MouseDoubleClicked();
     void SIGNAL_MouseDoubleClicked(QPointF a_CMousePos);
     void SIGNAL_MouseDragRelease(QPointF a_CMouseScenePos, CGraphicsWidget* a_pWhoAmI);
+    void SIGNAL_WheelScroll(int a_iSteps); //a_iSteps > 0 forward, else backward
 
     void SIGNAL_RemoveWidget(CGraphicsWidget* a_pRemoveWidget);
 
