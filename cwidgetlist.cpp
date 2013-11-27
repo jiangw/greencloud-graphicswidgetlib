@@ -36,7 +36,8 @@ void CWidgetList::ResetWidget()
     CWidgetNode* l_pWidgetNode = m_pWidgetListHead;
     while(l_pWidgetNode)
     {
-        this->SLOT_RemoveWidget(l_pWidgetNode->m_pWidget);
+        this->RemoveWidgetFromScene(l_pWidgetNode->m_pWidget);
+        l_pWidgetNode->m_pWidget = NULL;
         l_pWidgetNode = l_pWidgetNode->m_pNext;
     }
     this->ClearList();
@@ -306,13 +307,13 @@ void CWidgetList::AddWidget(CGraphicsWidget* a_pNewWidget)
         connect(a_pNewWidget, SIGNAL(SIGNAL_WidgetSizeChanged()),\
                 this, SLOT(SLOT_WidgetSizeChangeProc()));
 
-        CGraphicsWidget* l_pNewWidget = a_pNewWidget;
+//        CGraphicsWidget* l_pNewWidget = a_pNewWidget;
 
         if(NULL == m_pWidgetListHead)
         {
             m_pWidgetListHead = l_pNewNode;
             //set widget position
-            l_pNewWidget->setPos(m_iWidgetSpacingX, m_iHeaderHeight + m_iWidgetSpacingY);
+            //l_pNewWidget->setPos(m_iWidgetSpacingX, m_iHeaderHeight + m_iWidgetSpacingY);
         }
         else
         {
@@ -324,8 +325,8 @@ void CWidgetList::AddWidget(CGraphicsWidget* a_pNewWidget)
             l_pTail->m_pNext = l_pNewNode;
 
             //set widget position
-            CGraphicsWidget* l_pPrevWidget = l_pTail->m_pWidget;
-            this->SetNewWidgetPos(l_pPrevWidget, l_pNewWidget);
+            /*CGraphicsWidget* l_pPrevWidget = l_pTail->m_pWidget;
+            this->SetNewWidgetPos(l_pPrevWidget, l_pNewWidget);*/
         }
 
         m_iPageCurrPos = m_iWidgetCounter;
