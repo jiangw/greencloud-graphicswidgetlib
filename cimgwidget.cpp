@@ -54,7 +54,9 @@ void CImgWidget::ClearImg()
     m_qstrFileName.clear();
 
     QPixmap l_CPixmap(":/icon/brush_add");
-    m_CBackgroundBrush.setTexture(l_CPixmap.scaled(m_iWidth, m_iHeight));
+    m_CBackgroundBrush.setTexture(l_CPixmap.scaled(m_iWidth, m_iHeight,\
+                                                   Qt::IgnoreAspectRatio,\
+                                                   Qt::SmoothTransformation));
     update(this->boundingRect());
 }
 

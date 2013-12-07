@@ -5,6 +5,7 @@ qreal CGraphicsWidget::s_dMouseMoveDistThreshold = 3;
 CGraphicsWidget::CGraphicsWidget(CGraphicsWidget *a_pParent)
     :QGraphicsItem(a_pParent)
 {
+    m_blMouseDragFlag = true;
 }
 
 void CGraphicsWidget::InitBoundingRect(int a_iWidth, int a_iHeight)
@@ -70,10 +71,17 @@ void CGraphicsWidget::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
 
 void CGraphicsWidget::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
 {
-    if(QLineF(event->pos(), m_CMouseLastPos).length() \
-            > CGraphicsWidget::s_dMouseMoveDistThreshold)
+    if(m_blMouseDragFlag)
     {
-        this->MouseDragMove(event->pos());
+        if(QLineF(event->pos(), m_CMouseLastPos).length() \
+                > CGraphicsWidget::s_dMouseMoveDistThreshold)
+        {
+            this->MouseDragMove(event->pos());
+        }
+    }
+    else
+    {
+        event->ignore();
     }
 }
 

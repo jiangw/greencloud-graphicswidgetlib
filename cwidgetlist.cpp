@@ -422,7 +422,12 @@ void CWidgetList::RemoveWidget(CGraphicsWidget* a_pDelWidget)
         delete l_pDelNode;
         this->RemoveWidgetFromScene(a_pDelWidget);
 
-        this->UpdateBoundingRect(this->WidgetWidth(), this->WidgetHeight());
+        m_iPageCurrPos--;
+        if(m_iPageCurrPos < 1)
+        {
+            m_iPageCurrPos = 1;
+        }
+        this->PageUpdate();
     }
 }
 
@@ -487,14 +492,16 @@ void CWidgetList::SLOT_WidgetSizeChangeProc()
     CWidgetNode* l_pWidgetNodePrev = NULL;
     while(l_pWidgetNode)
     {
-        if(l_pWidgetNode != m_pWidgetListHead)
+        if(l_pWidgetNode->m_pWidget->isVisible())
         {
-            CGraphicsWidget* l_pPrev = l_pWidgetNodePrev->m_pWidget;
-            CGraphicsWidget* l_pCurr = l_pWidgetNode->m_pWidget;
-            this->SetNewWidgetPos(l_pPrev, l_pCurr);
+            if(l_pWidgetNodePrev != NULL)
+            {
+                CGraphicsWidget* l_pPrev = l_pWidgetNodePrev->m_pWidget;
+                CGraphicsWidget* l_pCurr = l_pWidgetNode->m_pWidget;
+                this->SetNewWidgetPos(l_pPrev, l_pCurr);
+            }
+            l_pWidgetNodePrev = l_pWidgetNode;
         }
-
-        l_pWidgetNodePrev = l_pWidgetNode;
         l_pWidgetNode = l_pWidgetNode->m_pNext;
     }
     this->UpdateBoundingRect();

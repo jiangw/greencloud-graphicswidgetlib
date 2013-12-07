@@ -9,6 +9,10 @@ CTextWidget::CTextWidget(bool a_blEditable, CGraphicsWidget *a_pParent)
     m_iFontSize = 12;
     m_iTextWidthExt = 10;
     m_iTextHeightExt = 9;
+    m_iWidgetFixedHeight = -1;
+    m_iWidgetFixedWidth = -1;
+    m_iWidgetMinimHeight = 0;
+    m_iWidgetMinimWidth = 0;
 
     m_CTipFont.setFamily("Arial");
     m_CTipFont.setItalic(true);
@@ -63,8 +67,22 @@ void CTextWidget::SetInputTip(QString a_qstrTip)
 void CTextWidget::SetFixedSize(int a_iFixedWidth, int a_iFixedHeight)
 {
     m_blSizeFixed = true;
-    m_iTextWidth = a_iFixedWidth;
-    m_iTextHeight = a_iFixedHeight;
+    m_iWidgetFixedWidth = a_iFixedWidth;
+    m_iWidgetFixedHeight = a_iFixedHeight;
+
+    this->UpdateBoundingRect();
+}
+
+void CTextWidget::SetMinimWidth(int a_iMinWidth)
+{
+    m_iWidgetMinimWidth = a_iMinWidth;
+
+    this->UpdateBoundingRect();
+}
+
+void CTextWidget::SetMinimHeight(int a_iMinHeight)
+{
+    m_iWidgetMinimHeight = a_iMinHeight;
 
     this->UpdateBoundingRect();
 }
@@ -92,14 +110,64 @@ QString CTextWidget::GetText()
     return m_qstrText;
 }
 
+void CTextWidget::SetTextColor(Qt::GlobalColor a_EColor)
+{
+    m_CTextPen.setColor(a_EColor);
+    update(this->boundingRect());
+}
+
+void CTextWidget::SetHorizontalExt(int a_iHoriExt)
+{
+    if(a_iHoriExt < 0)
+    {
+        a_iHoriExt = 0;
+    }
+    m_iTextWidthExt = a_iHoriExt;
+    this->UpdateBoundingRect();
+}
+
+void CTextWidget::SetVerticalExt(int a_iVertExt)
+{
+    if(a_iVertExt < 0)
+    {
+        a_iVertExt = 0;
+    }
+    m_iTextHeightExt = a_iVertExt;
+    this->UpdateBoundingRect();
+}
+
 int CTextWidget::WidgetWidth()
 {
-    return m_iTextWidth + m_iTextWidthExt;
+    int l_iWidth = m_iTextWidth + m_iTextWidthExt;
+    if(m_iWidgetMinimWidth > 0) //has minimum width specification
+    {
+        if(l_iWidth < m_iWidgetMinimWidth)
+        {
+            l_iWidth = m_iWidgetMinimWidth;
+        }
+    }
+    if(m_blSizeFixed) //has fixed size, this will violate all the operations above
+    {
+        l_iWidth = m_iWidgetFixedWidth;
+    }
+    return  l_iWidth;
 }
 
 int CTextWidget::WidgetHeight()
 {
-    return m_iTextHeight + m_iTextHeightExt;
+    int l_iHeight = m_iTextHeight + m_iTextHeightExt;
+    if(m_iWidgetMinimHeight > 0) //has minimum height specification
+    {
+        if(l_iHeight < m_iWidgetMinimHeight)
+        {
+            l_iHeight = m_iWidgetMinimHeight;
+        }
+    }
+    if(m_blSizeFixed) //has fixed size, this will violate all the operations above
+    {
+        l_iHeight = m_iWidgetFixedHeight;
+    }
+    return l_iHeight;
 }
 
 void CTextWidget::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
@@ -206,13 +274,9 @@ void CTextWidget::TextChanged()
 
     QFontMetrics l_CFontMetrics(l_CFont);
     QRectF l_CBR = l_CFontMetrics.boundingRect(l_qstrText);
-    if(!m_blSizeFixed)
-    {
-        m_iTextWidth = l_CBR.width();
-        m_iTextHeight = l_CBR.height();
 
-        this->UpdateBoundingRect();
-    }
+    m_iTextWidth = l_CBR.width();
+    m_iTextHeight = l_CBR.height();
 
-    update(this->boundingRect());
+    this->UpdateBoundingRect();
 }
