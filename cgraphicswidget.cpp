@@ -6,6 +6,7 @@ CGraphicsWidget::CGraphicsWidget(CGraphicsWidget *a_pParent)
     :QGraphicsItem(a_pParent)
 {
     m_blMouseDragFlag = true;
+    m_blFreezed = false;
 }
 
 void CGraphicsWidget::InitBoundingRect(int a_iWidth, int a_iHeight)
@@ -29,6 +30,24 @@ void CGraphicsWidget::UpdateBoundingRect(int a_iWidth, int a_iHeight)
 void CGraphicsWidget::UpdateBoundingRect()
 {
     this->UpdateBoundingRect(this->WidgetWidth(), this->WidgetHeight());
+}
+
+void CGraphicsWidget::FreezeWidget(bool a_blFreezed)
+{
+    m_blFreezed = a_blFreezed;
+    if(m_blFreezed)
+    {
+        this->setVisible(false);
+    }
+    else
+    {
+        this->setVisible(true);
+    }
+}
+
+bool CGraphicsWidget::IsFreezed()
+{
+    return m_blFreezed;
 }
 
 QRectF CGraphicsWidget::boundingRect() const

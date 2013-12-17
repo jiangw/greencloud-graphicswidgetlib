@@ -24,6 +24,9 @@ protected:
     //override from CGraphicsWidget
     void LeftButtonClicked(QPointF a_CMousePos);
 
+signals:
+    void SIGNAL_Checked();
+
 private:
     int m_iWidgetSize;
     bool m_blChecked;

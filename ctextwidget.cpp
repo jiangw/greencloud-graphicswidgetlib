@@ -136,6 +136,22 @@ void CTextWidget::SetVerticalExt(int a_iVertExt)
     this->UpdateBoundingRect();
 }
 
+void CTextWidget::TakeInput()
+{
+    m_pTextEditor->setPlainText(m_qstrText);
+    QTextCursor l_CTextCursor = m_pTextEditor->textCursor();
+    l_CTextCursor.movePosition(QTextCursor::End);
+    m_pTextEditor->setTextCursor(l_CTextCursor);
+    m_pTextEditor->setVisible(true);
+    m_pTextEditor->setFocus();
+}
+
+void CTextWidget::ResetWidget()
+{
+    m_qstrText.clear();
+    this->TextChanged();
+}
+
 int CTextWidget::WidgetWidth()
 {
     int l_iWidth = m_iTextWidth + m_iTextWidthExt;
@@ -229,12 +245,7 @@ void CTextWidget::LeftButtonClicked(QPointF a_CMousePos)
 
     if(m_blEditable)
     {
-        m_pTextEditor->setPlainText(m_qstrText);
-        QTextCursor l_CTextCursor = m_pTextEditor->textCursor();
-        l_CTextCursor.movePosition(QTextCursor::End);
-        m_pTextEditor->setTextCursor(l_CTextCursor);
-        m_pTextEditor->setVisible(true);
-        m_pTextEditor->setFocus();
+        this->TakeInput();
     }
 }
 
@@ -243,6 +254,7 @@ void CTextWidget::SLOT_EditFinishProc()
     m_pTextEditor->setVisible(false);
     m_qstrText = m_pTextEditor->document()->toPlainText();
     this->TextChanged();
+    emit this->SIGNAL_EditFinished();
 }
 
 int CTextWidget::GetTextType()

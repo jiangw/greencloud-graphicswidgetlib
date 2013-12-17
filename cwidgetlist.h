@@ -24,6 +24,7 @@ public:
     ~CWidgetList();
     void ResetWidget();
     void ClearList();
+    void UpdateWidgetList();
     void SetListOrientation(EListOrientation a_EOrientation);
     void SetHeaderSize(int a_iWidth, int a_iHeight);
     void SetHeaderWidget(CGraphicsWidget* a_pHeaderWidget);
@@ -35,7 +36,8 @@ public:
     void SetNewWidgetPos(CGraphicsWidget* a_pPrev, CGraphicsWidget* a_pNew);
     void RemoveWidget(CGraphicsWidget* a_pDelWidget);
     void SetWidgetOutline(bool a_blHasOutline);
-    bool Collapse();
+    bool HasOutLine(){return m_blHasOutline;}
+    bool IsCollapsed();
     void SetCollapse(bool a_blCollapse);
     void SetPageLength(int a_iPageLen);
     void SetPagePos(int a_iPagePos);

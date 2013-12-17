@@ -29,8 +29,10 @@ public:
     void SetTextColor(Qt::GlobalColor a_EColor);
     void SetHorizontalExt(int a_iHoriExt);
     void SetVerticalExt(int a_iVertExt);
+    void TakeInput();
 
     //override from CGraphicsWidget
+    void ResetWidget();
     int WidgetWidth();
     int WidgetHeight();
     void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget);
@@ -42,6 +44,9 @@ protected:
 
 public slots:
     void SLOT_EditFinishProc();
+
+signals:
+    void SIGNAL_EditFinished();
 
 private:
     int GetTextType(); //get text type(1:text 0:tip)

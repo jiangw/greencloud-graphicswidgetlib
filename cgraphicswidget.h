@@ -29,8 +29,9 @@ public:
     {return "CGraphicsWidget";} //return the class name of this widget
     virtual void Hightlight(bool a_blHightlight)\
     {Q_UNUSED(a_blHightlight)}//highlight widget
-    void MouseDragSwitch(bool a_blMouseDrag)\
-    {m_blMouseDragFlag = a_blMouseDrag;}
+    void MouseDragSwitch(bool a_blMouseDrag){m_blMouseDragFlag = a_blMouseDrag;}
+    void FreezeWidget(bool a_blFreezed);
+    bool IsFreezed();
 
     static qreal s_dMouseMoveDistThreshold;
 
@@ -68,11 +69,14 @@ signals:
     void SIGNAL_RemoveWidget(CGraphicsWidget* a_pRemoveWidget);
 
     void SIGNAL_WidgetSizeChanged();
+    //send messages to QMessageBox
+    void SIGNAL_ShowInMessageBox(QString a_qstrMsg);
 
 private:
     QRectF m_CBR;
     QPointF m_CMouseLastPos;
     bool m_blMouseDragFlag;//true(default): enable mouse drag, false: disable mouse drag
+    bool m_blFreezed;
 };
 
 #endif // CGRAPHICSWIDGET_H

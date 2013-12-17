@@ -56,4 +56,5 @@ void CCheckWidget::LeftButtonClicked(QPointF a_CMousePos)
 
     m_blChecked = !m_blChecked;
     update(this->boundingRect());
+    emit this->SIGNAL_Checked();
 }

@@ -57,6 +57,11 @@ void CWidgetList::ClearList()
     m_iWidgetCounter = 0;
 }
 
+void CWidgetList::UpdateWidgetList()
+{
+    this->PageUpdate();
+}
+
 void CWidgetList::SetListOrientation(EListOrientation a_EOrientation)
 {
     if(m_EOrient != a_EOrientation)
@@ -211,7 +216,7 @@ int CWidgetList::WidgetHeight()
         }
         l_pWidgetNode = l_pWidgetNode->m_pNext;
     }
-    return l_iHeight + m_iHeaderHeight;
+    return l_iHeight + m_iHeaderHeight + m_iWidgetSpacingY;
 }
 
 QString CWidgetList::WidgetClassName()
@@ -437,7 +442,7 @@ void CWidgetList::SetWidgetOutline(bool a_blHasOutline)
     update(this->boundingRect());
 }
 
-bool CWidgetList::Collapse()
+bool CWidgetList::IsCollapsed()
 {
     return m_blCollapse;
 }
@@ -532,6 +537,11 @@ void CWidgetList::PageUpdate()
     bool l_blShowWidget;
     while(l_pWidgetNode)
     {
+        if(l_pWidgetNode->m_pWidget->IsFreezed())
+        {
+            l_pWidgetNode = l_pWidgetNode->m_pNext;
+            continue;
+        }
         /*
         if(l_iPos < m_iPageCurrPos)
         {
