@@ -1,6 +1,6 @@
 #include "cbuttonwidget.h"
 
-const int CButtonWidget::s_iButtonMinWidth = 50;
+const int CButtonWidget::s_iButtonMinWidth = 80;
 const int CButtonWidget::s_iButtonMinHeight = 24;
 
 CButtonWidget::CButtonWidget(QString a_qstrText, CGraphicsWidget *a_pParent)

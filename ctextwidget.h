@@ -26,7 +26,7 @@ public:
     void SetWidgetUnderline(bool a_blHasUnderline);
     void SetText(QString a_qstrText);
     QString GetText();
-    void SetTextColor(Qt::GlobalColor a_EColor);
+    void SetTextColor(CGraphicsWidget::gColor a_EColor);
     void SetHorizontalExt(int a_iHoriExt);
     void SetVerticalExt(int a_iVertExt);
     void TakeInput();

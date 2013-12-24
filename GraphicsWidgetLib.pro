@@ -22,7 +22,8 @@ SOURCES += main.cpp \
     ctextwidget.cpp \
     ctexteditor.cpp \
     cwidgetlist.cpp \
-    cimgwidget.cpp
+    cimgwidget.cpp \
+    cmessagewidget.cpp
 
 HEADERS  += \
     ctestwindow.h \
@@ -35,7 +36,8 @@ HEADERS  += \
     ctextwidget.h \
     ctexteditor.h \
     cwidgetlist.h \
-    cimgwidget.h
+    cimgwidget.h \
+    cmessagewidget.h
 
 RESOURCES += \
     res.qrc

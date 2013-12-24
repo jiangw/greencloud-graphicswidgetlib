@@ -13,6 +13,7 @@
 #include "ctextwidget.h"
 #include "cwidgetlist.h"
 #include "cimgwidget.h"
+#include "cmessagewidget.h"
 
 class CTestWindow : public QMainWindow
 {
@@ -24,6 +25,7 @@ public:
 
 public slots:
     void SLOT_ButtonTriggeredProc();
+    void SLOT_ShowMsgBox();
 
 private:
     QGraphicsScene* m_pScene;
@@ -36,6 +38,7 @@ private:
     CTextWidget* m_pTextWidget;
     CWidgetList* m_pWidgetList;
     CImgWidget* m_pImgWidget;
+    CMessageWidget* m_pMsgWidget;
 };
 
 #endif // CTESTWINDOW_H

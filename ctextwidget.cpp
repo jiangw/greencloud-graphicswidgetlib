@@ -110,7 +110,7 @@ QString CTextWidget::GetText()
     return m_qstrText;
 }
 
-void CTextWidget::SetTextColor(Qt::GlobalColor a_EColor)
+void CTextWidget::SetTextColor(gColor a_EColor)
 {
     m_CTextPen.setColor(a_EColor);
     update(this->boundingRect());

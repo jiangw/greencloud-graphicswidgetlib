@@ -9,14 +9,29 @@
 #include <QPainter>
 #include <QGraphicsSceneMouseEvent>
 #include <QCursor>
+#include <QColor>
 
 #include <iostream>
 
 class CGraphicsWidget : public QObject, public QGraphicsItem
 {
     Q_OBJECT
-
 public:
+    enum gColor
+    {
+        red = (QRgb)0xff0000,
+        orange = (QRgb)0xf65d00,
+        yellow = (QRgb)0xffcc01,
+        green = (QRgb)0x00612e,
+        blue = (QRgb)0x01c6fb,
+        indigo = (QRgb)0x010066,
+        purple = (QRgb)0x960097,
+        pink = (QRgb)0xf86093,
+        brown = (QRgb)0x663433,
+        gray = (QRgb)0x555658,
+        white = (QRgb)0xdfdfdf
+    };
+
     CGraphicsWidget(CGraphicsWidget* a_pParent);
     virtual void ResetWidget(){}
     void InitBoundingRect(int a_iWidth, int a_iHeight);
